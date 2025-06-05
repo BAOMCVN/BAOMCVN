@@ -1,19 +1,16 @@
-name: Test tải server
+name: loadtest-max
 
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
-  load-test:
+  stress-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        id: [1, 2, 3, 4, 5]
     steps:
       - name: Cài hey
-        run: |
-          sudo apt update
-          sudo apt install -y golang-go
-          go install github.com/rakyll/hey@latest
-          echo "$HOME/go/bin" >> $GITHUB_PATH
+        run: sudo apt-get update && sudo apt-get install -y hey
 
-      - name: Gửi 1000 request đến server
-        run: |
-          hey -n 1000 -c 50 play.langbaton.fun
+      - name: Bắn 10000 request
+        run: hey -z 120s -c 1000 play.langbaton.fun
