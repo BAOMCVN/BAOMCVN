@@ -1,0 +1,19 @@
+name: Test tải server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cài hey
+        run: |
+          sudo apt update
+          sudo apt install -y golang-go
+          go install github.com/rakyll/hey@latest
+          echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Gửi 1000 request đến server
+        run: |
+          hey -n 1000 -c 50 play.langbaton.fun
